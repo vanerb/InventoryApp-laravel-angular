@@ -1,1 +1,112 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+  /* Paleta de texto */
+  --text-primary: #1A1A1A; /* Titulares, texto fuerte */
+  --text-secondary: #4D4D4D; /* Subtítulos, texto regular */
+  --text-green: #2E7D32; /* Verde oscuro, acento temático */
+  --text-muted: #9E9E9E; /* Texto desactivado o de ayuda */
+  --text-accent: #1565C0; /* Azul petróleo, para enlaces o énfasis */
+  --text-inverted: #ffffff;
+
+  --background-one: #287e1c;
+  --background-two: #4a9e3b;
+  --background-three: #6bbe5a;
+  --background-four: #8ddf79;
+  --background-five: #afff98;
+
+  --font-sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-serif: 'Merriweather', 'Georgia', serif;
+  --font-mono: 'Fira Code', 'Courier New', monospace;
+  --font-display: 'Poppins', 'Helvetica Neue', sans-serif;
+  --font-handwritten: 'Pacifico', cursive; /* Solo si quieres un toque personalizado */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+/*BACKGROUNDS*/
+
+.background-one {
+  background-color: var(--background-one);
+}
+
+.background-two {
+  background-color: var(--background-two);
+}
+
+.background-three {
+  background-color: var(--background-three);
+}
+
+.background-four {
+  background-color: var(--background-four);
+}
+
+.background-five {
+  background-color: var(--background-five);
+}
+
+
+/*TEXTS*/
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-inverted {
+  color: var(--text-inverted);
+}
+
+.text-accent {
+  color: var(--text-accent);
+}
+
+.text-green {
+  color: var(--text-green);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/*FONTS*/
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+.font-serif {
+  font-family: var(--font-serif);
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+.font-display {
+  font-family: var(--font-display);
+}
+.font-handwritten {
+  font-family: var(--font-handwritten);
+}
+
+
+.hover-bg {
+  background-color: var(--bg-default, transparent);
+  transition: background-color 0.3s ease;
+  justify-items: center;
+  align-items: center;
+  display: flex;
+}
+
+.hover-bg:hover {
+  background-color: var(--hover-bg, yellow);
+  cursor: pointer;
+}
+
+

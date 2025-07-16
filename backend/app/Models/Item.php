@@ -12,4 +12,20 @@ class Item extends Model
    {
        return $this->belongsTo(User::class);
    }
+
+  public function images()
+  {
+      return $this->hasMany(Image::class);
+  }
+
+  public function coverImage()
+  {
+      return $this->hasOne(Image::class)->where('from', 'cover');
+  }
+
+  public function galleryImages()
+  {
+      return $this->hasMany(Image::class)->where('from', 'gallery');
+  }
+
 }

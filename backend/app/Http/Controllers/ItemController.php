@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\Image;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
-     use AuthorizesRequests;
+      use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-         return $request->user()->items;
+           return $request->user()->items()->with('images')->get();
     }
 
     /**
@@ -22,12 +24,18 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $item = $request->user()->items()->create($request->validate([
-               'name' => 'required|string|max:255',
-               'description' => 'nullable|string',
-           ]));
+         $validated = $request->validate([
+                   'name' => 'required|string|max:255',
+                   'description' => 'nullable|string',
+                   'cover_image' => 'nullable|image',
+                   'gallery_images.*' => 'nullable|image',
+               ]);
 
-           return response()->json($item, 201);
+               $item = $request->user()->items()->create($validated);
+
+               $this->handleImages($request, $item);
+
+               return response()->json($item->load('images'), 201);
     }
 
     /**
@@ -35,10 +43,8 @@ class ItemController extends Controller
      */
     public function show(string $id)
     {
-          $item = Item::findOrFail($id);
-
+    $item = Item::with('images')->findOrFail($id);
              $this->authorize('view', $item);
-
              return $item;
     }
 
@@ -47,10 +53,20 @@ class ItemController extends Controller
      */
     public function update(Request $request, string $id)
     {
-     $item = Item::findOrFail($id);
-       $this->authorize('update', $item);
-           $item->update($request->only(['name', 'description']));
-           return $item;
+      $item = Item::findOrFail($id);
+            $this->authorize('update', $item);
+
+            $validated = $request->validate([
+                'name' => 'sometimes|string|max:255',
+                'description' => 'nullable|string',
+                'cover_image' => 'nullable|image',
+                'gallery_images.*' => 'nullable|image',
+            ]);
+
+            $item->update($validated);
+            $this->handleImages($request, $item, true);
+
+            return $item->load('images');
     }
 
     /**
@@ -59,8 +75,78 @@ class ItemController extends Controller
     public function destroy(string $id)
     {
      $item = Item::findOrFail($id);
-       $this->authorize('delete', $item);
-           $item->delete();
-           return response()->noContent();
+            $this->authorize('delete', $item);
+
+            foreach ($item->images as $image) {
+                $this->safeDeleteImage($image);
+            }
+
+            $item->delete();
+
+            return response()->noContent();
     }
+
+
+ // 🔁 Manejo de imágenes de portada y galería
+    protected function handleImages(Request $request, Item $item, $isUpdate = false)
+    {
+        // Portada
+        if ($request->hasFile('cover_image')) {
+            if ($isUpdate && $item->coverImage) {
+                $this->safeDeleteImage($item->coverImage);
+                $item->coverImage()->delete();
+            }
+
+            $coverPath = $this->storeUniqueImage($request->file('cover_image'));
+
+            $item->images()->create([
+                'path' => $coverPath,
+                'from' => 'cover',
+            ]);
+        }
+
+        // Galería
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $imageFile) {
+                $path = $this->storeUniqueImage($imageFile);
+
+                $alreadyExists = $item->galleryImages()->where('path', $path)->exists();
+                if (!$alreadyExists) {
+                    $item->images()->create([
+                        'path' => $path,
+                        'from' => 'gallery',
+                    ]);
+                }
+            }
+        }
+    }
+
+
+ protected function storeUniqueImage($file)
+    {
+        $hash = md5_file($file->getRealPath());
+        $filename = $hash . '.' . $file->getClientOriginalExtension();
+        $path = 'images/' . $filename;
+
+        if (!Storage::disk('public')->exists($path)) {
+            $file->storeAs('images', $filename, 'public');
+        }
+
+        return $path;
+    }
+
+    // Eliminar imagen del disco solo si nadie más la usa
+    protected function safeDeleteImage(Image $image)
+    {
+        $count = Image::where('path', $image->path)->count();
+
+        if ($count <= 1 && Storage::disk('public')->exists($image->path)) {
+            Storage::disk('public')->delete($image->path);
+        }
+
+        $image->delete();
+    }
+
+
+
 }
