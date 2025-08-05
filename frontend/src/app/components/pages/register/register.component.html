@@ -1,1 +1,44 @@
-<p>register works!</p>
+<app-conteiner>
+
+  <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center">
+    <div style="width: 80%;">
+      <div style="width: 100%; display: flex; justify-content: center; align-items: center">
+        <h2 class="text-primary">REGISTRO</h2>
+      </div>
+
+      <form style="width: 100%; height: 100%; background-color: var(--background-four); padding: 20px; border: 2px transparent solid; border-radius: 5px">
+
+        <div style="height: 100%; width: 100%; ">
+          <div style="display: flex; flex-direction: column">
+            <label class="text-primary" for="name">Nombre</label>
+            <input style="padding: 8px; margin-top: 8px; border-radius: 5px; border: 0px var(--background-one) solid" type="text" id="name" placeholder="Introduzca un nombre válido">
+          </div>
+          <div style="display: flex; flex-direction: column; margin-top: 20px">
+            <label class="text-primary" for="email">Email</label>
+            <input style="padding: 8px; margin-top: 8px; border-radius: 5px; border: 0px var(--background-one) solid" type="text" id="email" placeholder="Introduzca un correo válido">
+          </div>
+
+          <div style="display: flex; flex-direction: column; margin-top: 20px">
+            <label class="text-primary" for="email">Contraseña</label>
+            <input style="padding: 8px; margin-top: 8px; border-radius: 5px; border: 0px var(--background-one) solid" type="password" id="password" placeholder="Introduzca una contraseña válida">
+          </div>
+          <div style="display: flex; flex-direction: column; margin-top: 20px">
+            <label class="text-primary" for="repeat_password">Repetir Contraseña</label>
+            <input style="padding: 8px; margin-top: 8px; border-radius: 5px; border: 0px var(--background-one) solid" type="password" id="repeat_password" placeholder="Repita la contraseña">
+          </div>
+
+        </div>
+        <div style="width: 100%; margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="width: 100%">
+            <span class="text-primary" style="font-size: 14px">Si ya tienes cuenta puedes iniciar sesión pulsando <a [routerLink]="['/login']">aquí</a></span>
+          </div>
+          <div style="width: 100%; display: flex; justify-content: end; align-items: center">
+            <button style="padding: 8px 16px;border-radius: 5px; border: 2px var(--background-one) solid; background-color: var(--background-one); color: var(--text-inverted)">Registrarse</button>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+</app-conteiner>

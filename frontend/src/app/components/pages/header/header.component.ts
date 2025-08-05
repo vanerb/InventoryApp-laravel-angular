@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../services/auth.service";
 import {UsersService} from "../../../services/users.service";
@@ -10,7 +10,7 @@ import {Header} from "../../../interfaces/header";
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnChanges{
 
   menu: Header[] = []
   selected: string = ""
@@ -26,71 +26,77 @@ export class HeaderComponent {
   }
 
 
+
+
   async ngOnInit() {
     if (this.authService.isLoggedIn()) {
-      this.menu = [
-        {
-          key: "init",
-          name: "Inicio",
-          position: "left",
-          action: async () => {
-            await this.router.navigate(['/']);
-            await this.selectionMenu();
-          }
-        },
-        {
-          key: "inventory",
-          name: "Inventario",
-          position: "left",
-          action: async () => {
-            await this.router.navigate(['/items']);
-            await this.selectionMenu();
-          }
-        },
-        {
-          key: "contact",
-          name: "Contacto",
-          position: "left",
-          action: async () => {
-            await this.router.navigate(['/contact']);
-            await this.selectionMenu();
-          }
-        },
-        {
-          key: "profile",
-          name: "Mi perfil",
-          position: "right",
-          action: async () => {
-            await this.router.navigate(['/my-panel']);
-            await this.selectionMenu();
-          },
-          children: [
-            {
-              key: "my-panel",
-              name: "Administración",
-              position: "right",
-              action: async () => {
-                await this.router.navigate(['/my-panel/']);
-                await this.selectionMenu();
-              }
-            },
-            {
-              key: "logout",
-              name: "Cerrar sesión",
-              position: "right",
-              action: async () => {
-                await this.authService.logout();
-                await this.router.navigate(['/login']);
-                await this.selectionMenu();
-              }
-            }
-          ]
-        }
-      ];
-    }
+       this.menu = [
+         {
+           key: "init",
+           name: "Inicio",
+           position: "left",
+           action: async () => {
+             await this.router.navigate(['/']);
+             await this.selectionMenu();
+           }
+         },
+         {
+           key: "inventory",
+           name: "Inventario",
+           position: "left",
+           action: async () => {
+             await this.router.navigate(['/inventory']);
+             await this.selectionMenu();
+           }
+         },
+         {
+           key: "contact",
+           name: "Contacto",
+           position: "left",
+           action: async () => {
+             await this.router.navigate(['/contact']);
+             await this.selectionMenu();
+           }
+         },
+         {
+           key: "profile",
+           name: "Mi perfil",
+           position: "right",
+           action: async () => {
+             await this.router.navigate(['/my-panel']);
+             await this.selectionMenu();
+           },
+           children: [
+             {
+               key: "my-panel",
+               name: "Administración",
+               position: "right",
+               action: async () => {
+                 await this.router.navigate(['/my-panel/']);
+                 await this.selectionMenu();
+               }
+             },
+             {
+               key: "logout",
+               name: "Cerrar sesión",
+               position: "right",
+               action: async () => {
+                 this.authService.logout();
+                 await this.router.navigate(['/login']);
+                 await this.selectionMenu();
+                 window.location.reload()
+               }
+             }
+           ]
+         }
+       ];
+     }
 
 
-    this.selectionMenu()
+
+
+
+    await this.selectionMenu()
 
 
   }
@@ -111,23 +117,17 @@ export class HeaderComponent {
 
     console.log(item)
     switch (item) {
-      case "recipes":
-        this.selected = this.menu.find(el => el.key === "recipes")?.name ?? ""
+      case "inventory":
+        this.selected = this.menu.find(el => el.key === "items")?.name ?? ""
         return
 
-      case "register":
-        this.selected = this.menu.find(el => el.key === "register")?.name ?? ""
+      case "init":
+        this.selected = this.menu.find(el => el.key === "init")?.name ?? ""
         return
       case "contact":
         this.selected = this.menu.find(el => el.key === "contact")?.name ?? ""
         return
       case "profile":
-        this.selected = this.menu.find(el => el.key === "profile")?.name ?? ""
-        return
-      case "management":
-        this.selected = this.menu.find(el => el.key === "profile")?.name ?? ""
-        return
-      case "categories":
         this.selected = this.menu.find(el => el.key === "profile")?.name ?? ""
         return
       case "my-panel":
@@ -147,6 +147,8 @@ export class HeaderComponent {
     }
   }
 
+  async ngOnChanges(changes: SimpleChanges) {
 
+  }
 
 }

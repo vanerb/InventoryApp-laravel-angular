@@ -15,20 +15,23 @@ return [
     |
     */
 
-    'paths' => ['*'],
+   'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+      'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
+      'allowed_origins' => ['http://localhost:4200'],
 
-    'allowed_origins_patterns' => [],
+      // O para desarrollo (NO recomendado en producción):
+      // 'allowed_origins' => ['*'],
 
-    'allowed_headers' => ['*'],
+      'allowed_origins_patterns' => [],
 
-    'exposed_headers' => [],
+      'allowed_headers' => ['*'],
 
-    'max_age' => 0,
+      'exposed_headers' => [],
 
-    'supports_credentials' => true,
+      'max_age' => 0,
+
+      'supports_credentials' => true, // solo si usas cookies con Sanctum
 
 ];

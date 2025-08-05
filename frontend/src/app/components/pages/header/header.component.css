@@ -1,14 +1,28 @@
-.hover-effect {
-  padding-right: 20px;
-  padding-left: 20px;
+
+
+
+.menu-item-wrapper:hover .submenu {
+  display: block;
 }
 
-.hover-effect:hover {
-  background-color: var(--background-two);
-  height: 40px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.submenu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background-color: var(--background-one);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+  min-width: 160px;
+  border-radius: 4px;
+}
+
+.submenu-item {
+  padding: 10px 20px;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.submenu-item:hover {
+  background-color: var(--background-two);
 }

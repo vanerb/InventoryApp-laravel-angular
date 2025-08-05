@@ -1,0 +1,75 @@
+<div style="width: 100%; height: 100%;">
+  <div>
+    <form [formGroup]="form" style="width: 100%; height: 100%; font-family: var(--font-sans);">
+
+      <div style="width: 100%; text-align: center">
+        <span style="font-size: 24px; font-weight: bold">Editar elemento</span>
+      </div>
+      <div style="height: 100%; width: 100%;">
+        <div style="display: flex; flex-direction: column; margin-top: 20px">
+          <label class="text-primary" for="name">Nombre</label>
+          <input formControlName="name"
+                 style="padding: 8px; margin-top: 8px; border-radius: 5px; border: 1px var(--background-one) solid"
+                 type="text" id="name" placeholder="Introduzca un nombre válido">
+        </div>
+
+        <div style="display: flex; flex-direction: column; margin-top: 20px">
+          <label class="text-primary" for="description">Descripción</label>
+          <input formControlName="description"
+                 style="padding: 8px; margin-top: 8px; border-radius: 5px; border: 1px var(--background-one) solid"
+                 type="text" id="description" placeholder="Introduzca una descripción válida">
+        </div>
+
+        <div style="display: flex; flex-direction: column; margin-top: 20px">
+          <label class="text-primary" for="cover_image">Imagen portada</label>
+          <input #coverInput (change)="onCoverImageChange($event)" type="file" accept="image/*"
+                 style="padding: 8px; margin-top: 8px; border-radius: 5px;"
+                 id="cover_image">
+        </div>
+
+        <div style="display: flex; flex-direction: column; margin-top: 20px">
+          <label class="text-primary" for="gallery_images">Imagenes</label>
+          <input #galleryInput (change)="onGalleryImagesChange($event)" type="file" accept="image/*"
+                 style="padding: 8px; margin-top: 8px; border-radius: 5px;"
+                 id="gallery_images" multiple>
+        </div>
+
+
+        <div *ngIf="selectedImagesGallery.length > 0">
+          <p>Imágenes de items seleccionadas:</p>
+          <ul>
+            <li *ngFor="let img of selectedImagesGallery; let i = index"><i (click)="delete(i, 'gallery')"
+                                                                            class="bi bi-x-circle cursor-pointer space-x-2"></i> {{ img.name }}
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p>Imágenes de items seleccionadas:</p>
+          <div style="display: flex; justify-content: start; align-items: start">
+            <div style="margin-right: 10px" *ngFor="let img of item?.images; let i = index">
+              <img width="100" height="100" src="{{returnImage(img)}}">
+            </div>
+          </div>
+
+
+        </div>
+
+
+      </div>
+      <div style="width: 100%; margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+
+        <div style="width: 100%; display: flex; justify-content: end; align-items: center">
+          <button (click)="this.close()"
+                  style="padding: 8px 16px; margin-right: 20px; border-radius: 5px; border: 2px var(--background-one) solid; cursor: pointer">
+            Cancelar
+          </button>
+          <button (click)="updateItem()"
+                  style="padding: 8px 16px;border-radius: 5px; border: 2px var(--background-one) solid; background-color: var(--background-one); color: var(--text-inverted);  cursor: pointer">
+            Editar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
