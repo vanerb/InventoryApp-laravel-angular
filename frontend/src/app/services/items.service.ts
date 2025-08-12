@@ -34,8 +34,13 @@ export class ItemsService {
     return this.http.delete(this.base + '/' + id, { headers })
   }
 
-  update(item: UpdateItem) {
-    let headers = new HttpHeaders().set('Authorization', `Bearer ${this.authService.getToken()}`);
-    return this.http.put(this.base + '/' + item.id, item, { headers })
+  update(id: string, formData: FormData) {
+    formData.append('_method', 'PATCH');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+
+    return this.http.post(this.base + '/' + id, formData, { headers });
   }
 }

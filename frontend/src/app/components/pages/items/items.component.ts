@@ -68,7 +68,11 @@ export class ItemsComponent implements OnInit {
       },
       {
         item: item
-      }).then(async () => {
+      }).then(async (item: { id: string, formData: FormData }) => {
+      this.itemsService.update(item.id, item.formData).subscribe({
+        next: () => this.updateItems(),
+        error: (err) => console.error(err)
+      });
 
     })
       .catch(() => {

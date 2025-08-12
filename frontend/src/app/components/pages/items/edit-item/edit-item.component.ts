@@ -67,25 +67,37 @@ export class EditItemComponent implements OnInit {
   }
 
 
-  onCoverImageChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+  onCoverImageChange(event: any) {
+    const file = event.target.files[0];
     if (file) {
-      this.form.get('cover_image')?.setValue(file);
+      this.form.patchValue({
+        cover_image: file
+      });
+      this.form.get('cover_image')?.updateValueAndValidity();
     }
   }
 
   onGalleryImagesChange(event: Event) {
     const input = event.target as HTMLInputElement;
     const files = input.files;
+
     if (files && files.length > 0) {
       const fileArray = Array.from(files);
-      this.form.get('gallery_images')?.setValue(fileArray);
+
+      const currentFiles = this.form.get('gallery_images')?.value || [];
+
+      const newFiles = currentFiles.concat(fileArray);
+
+      this.form.get('gallery_images')?.setValue(newFiles);
     }
   }
 
   delete(pos: number) {
+
     this.item?.images.splice(pos, 1)
+
+    this.selectedImagesCover = []
+    this.selectedImagesGallery = []
 
     this.item?.images.map(async el => {
       console.log("AAA", el)
@@ -101,20 +113,32 @@ export class EditItemComponent implements OnInit {
 
     this.form.get('gallery_images')?.setValue(this.selectedImagesGallery)
     this.form.get('cover_image')?.setValue(this.selectedImagesCover)
+
+
+    console.log(this.selectedImagesGallery)
+    console.log(this.selectedImagesCover)
+
+    console.log(this.form.value)
   }
 
 
   updateItem() {
 
     if (this.form.valid) {
+      console.log("LLEGO AQUI", this.form.value)
       const formData = new FormData();
 
       formData.append('name', this.form.get('name')?.value);
       formData.append('description', this.form.get('description')?.value);
 
       const coverImage = this.form.get('cover_image')?.value;
-      if (coverImage) {
-        formData.append('cover_image', coverImage);
+      if (coverImage instanceof Array) {
+        if (coverImage.length > 0) {
+          formData.append('cover_image', coverImage[0], coverImage[0]?.name);
+        }
+      }
+      if (coverImage instanceof File) {
+        formData.append('cover_image', coverImage, coverImage.name);
       }
 
       const galleryImages: File[] = this.form.get('gallery_images')?.value || [];
@@ -122,7 +146,9 @@ export class EditItemComponent implements OnInit {
         formData.append('gallery_images[]', img);
       });
 
-      this.confirm(formData)
+      console.log("FORMULARIO", this.form.value)
+
+      this.confirm({id: this.item?.id, formData: formData})
     } else {
 
 
