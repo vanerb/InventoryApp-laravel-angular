@@ -29,3 +29,12 @@ export interface UpdateItem{
   cover_image: File,
   gallery_images: File[]
 }
+
+export interface Image{
+  id: number,
+  item_id: number,
+  path: string,
+  from: string,
+  created_at: string,
+  updated_at: string
+}

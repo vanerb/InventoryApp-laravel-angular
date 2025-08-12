@@ -4,7 +4,7 @@ import {UsersService} from "../../../../services/users.service";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../services/auth.service";
 import {ItemsService} from "../../../../services/items.service";
-import {Item} from "../../../../interfaces/item";
+import {Image, Item} from "../../../../interfaces/item";
 
 @Component({
   selector: 'app-edit-item',
@@ -53,15 +53,11 @@ export class EditItemComponent implements OnInit {
 
   }
 
-   returnImage(image: {
-    "id": number,
-    "item_id": number,
-    "path": string,
-    "from": string,
-    "created_at": string,
-    "updated_at": string
-  }) {
-    return 'http://localhost:8000/image/' + image.path.replace(/^images\//, '')
+  returnImage(image: Image) {
+    if (image !== undefined)
+      return 'http://localhost:8000/image/' + image.path.replace(/^images\//, '')
+    else
+      return ""
   }
 
   async urlToFile(url: string, filename: string, mimeType: string): Promise<File> {
@@ -88,16 +84,23 @@ export class EditItemComponent implements OnInit {
     }
   }
 
-  delete(pos: number, type: string) {
-    if (type === 'cover') {
-      this.selectedImagesCover.splice(pos, 1);
-      this.form.get('ingredients')?.setValue(this.selectedImagesCover);
+  delete(pos: number) {
+    this.item?.images.splice(pos, 1)
 
-    } else if (type === 'gallery') {
-      this.selectedImagesGallery.splice(pos, 1);
-      this.form.get('preparations')?.setValue(this.selectedImagesGallery);
+    this.item?.images.map(async el => {
+      console.log("AAA", el)
+      if (el.from == 'gallery') {
+        const file = await this.urlToFile('http://localhost:8000/image/' + el.path.replace(/^images\//, ''), el.from + ".jpg", 'image/jpeg');
+        this.selectedImagesGallery.push(file)
+      } else if (el.from === 'cover') {
+        const file = await this.urlToFile('http://localhost:8000/image/' + el.path.replace(/^images\//, ''), el.from + ".jpg", 'image/jpeg');
+        this.selectedImagesCover.push(file)
+      }
 
-    }
+    })
+
+    this.form.get('gallery_images')?.setValue(this.selectedImagesGallery)
+    this.form.get('cover_image')?.setValue(this.selectedImagesCover)
   }
 
 

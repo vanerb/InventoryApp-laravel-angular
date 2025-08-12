@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CreateItem, Item} from "../../../interfaces/item";
+import {CreateItem, Image, Item} from "../../../interfaces/item";
 import {ItemsService} from "../../../services/items.service";
 import {ModalService} from "../../../services/modal.service";
 import {AddItemComponent} from "./add-item/add-item.component";
@@ -126,25 +126,14 @@ export class ItemsComponent implements OnInit {
     });
   }
 
-  returnImage(image: {
-    "id": number,
-    "item_id": number,
-    "path": string,
-    "from": string,
-    "created_at": string,
-    "updated_at": string
-  }) {
-    return 'http://localhost:8000/image/' + image.path.replace(/^images\//, '')
+  returnImage(image: Image) {
+    if (image !== undefined)
+      return 'http://localhost:8000/image/' + image.path.replace(/^images\//, '')
+    else
+      return ""
   }
 
-  getImages(images: {
-    id: number,
-    item_id: number,
-    path: string,
-    from: string,
-    created_at: string,
-    updated_at: string
-  }[]) {
+  getImages(images: Image[]) {
     return images.filter(el => el.from === 'cover')[0]
   }
 
