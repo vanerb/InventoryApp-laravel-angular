@@ -35,14 +35,14 @@
         </div>
 
 
-        <div *ngIf="selectedImagesGallery.length > 0">
-          <p>Imágenes de items seleccionadas:</p>
-          <ul>
-            <li *ngFor="let img of selectedImagesGallery; let i = index"><i (click)="delete(i, 'gallery')"
-                                                                            class="bi bi-x-circle cursor-pointer space-x-2"></i> {{ img.name }}
-            </li>
-          </ul>
-        </div>
+        <!-- <div *ngIf="selectedImagesGallery.length > 0">
+           <p>Imágenes de items seleccionadas:</p>
+           <ul>
+             <li *ngFor="let img of selectedImagesGallery; let i = index"><i (click)="delete(i, 'gallery')"
+                                                                             class="bi bi-x-circle cursor-pointer space-x-2"></i> {{ img.name }}
+             </li>
+           </ul>
+         </div>-->
 
         <div>
           <p>Imágenes de items seleccionadas:</p>

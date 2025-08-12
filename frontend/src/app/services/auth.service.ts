@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Login, Token} from "../interfaces/auth";
 import {Router} from "@angular/router";
+import {CreateUser} from "../interfaces/user";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  getToken(){
+  getToken() {
     return localStorage.getItem('token');
   }
 
@@ -36,6 +37,18 @@ export class AuthService {
     });
 
 
+  }
+
+  register(user: CreateUser) {
+    this.http.post<Token>(this.base + '/register', user).subscribe({
+      next: async (token: Token) => {
+        await this.router.navigate(['/']);
+        window.location.reload()
+      },
+      error: (err) => {
+
+      }
+    });
   }
 
   setToken(token: string) {
