@@ -5,6 +5,8 @@ import {AuthService} from "../../../../services/auth.service";
 import {Router} from "@angular/router";
 import {ItemsService} from "../../../../services/items.service";
 import {CreateItem} from "../../../../interfaces/item";
+import {ModalService} from "../../../../services/modal.service";
+import {WarningModalComponent} from "../../../general/warning-modal/warning-modal.component";
 
 @Component({
   selector: 'app-add-item',
@@ -18,7 +20,7 @@ export class AddItemComponent {
   close!: () => void;
 
 
-  constructor(private readonly userService: UsersService, private fb: FormBuilder, private router: Router, private readonly authService: AuthService, private readonly itemsService: ItemsService) {
+  constructor(private readonly userService: UsersService, private fb: FormBuilder, private router: Router, private readonly authService: AuthService, private readonly itemsService: ItemsService, private readonly modalService: ModalService) {
     this.form = this.fb.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
@@ -45,7 +47,7 @@ export class AddItemComponent {
   }
 
 
-  addItem(){
+  addItem() {
 
     if (this.form.valid) {
       const formData = new FormData();
@@ -66,6 +68,21 @@ export class AddItemComponent {
       this.confirm(formData)
     } else {
 
+      this.modalService.open(WarningModalComponent, {
+          width: '350px',
+
+        },
+        {
+          title: "Aviso",
+          message: "Hay errores en el formulario. Porfavor réviselo.",
+          type: "info"
+        }).then(async () => {
+
+
+      })
+        .catch(() => {
+          this.modalService.close()
+        });
 
     }
 

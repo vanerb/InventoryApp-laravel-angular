@@ -89,42 +89,42 @@ class ItemController extends Controller
 
 
  // 🔁 Manejo de imágenes de portada y galería
-  protected function handleImages(Request $request, Item $item, $isUpdate = false)
-  {
-      // Borrar portada si hay y si es actualización
-      if ($isUpdate && $item->coverImage) {
-          $this->safeDeleteImage($item->coverImage);
-          $item->coverImage()->delete();
-      }
+ protected function handleImages(Request $request, Item $item, $isUpdate = false)
+ {
+     // Siempre eliminar la portada previa (si existe) antes de subir otra
+     if ($item->coverImage) {
+         $this->safeDeleteImage($item->coverImage);
+         $item->coverImage()->delete();
+     }
 
-      // Borrar galería completa si es actualización
-      if ($isUpdate) {
-          foreach ($item->galleryImages as $oldImage) {
-              $this->safeDeleteImage($oldImage);
-              $oldImage->delete();
-          }
-      }
+     // Si es actualización, borrar galería completa
+     if ($isUpdate) {
+         foreach ($item->galleryImages as $oldImage) {
+             $this->safeDeleteImage($oldImage);
+             $oldImage->delete();
+         }
+     }
 
-      // Subir nueva portada si existe
-      if ($request->hasFile('cover_image')) {
-          $coverPath = $this->storeUniqueImage($request->file('cover_image'));
-          $item->images()->create([
-              'path' => $coverPath,
-              'from' => 'cover',
-          ]);
-      }
+     // Subir nueva portada si existe
+     if ($request->hasFile('cover_image')) {
+         $coverPath = $this->storeUniqueImage($request->file('cover_image'));
+         $item->images()->create([
+             'path' => $coverPath,
+             'from' => 'cover',
+         ]);
+     }
 
-      // Subir nuevas imágenes de galería si existen
-      if ($request->hasFile('gallery_images')) {
-          foreach ($request->file('gallery_images') as $imageFile) {
-              $path = $this->storeUniqueImage($imageFile);
-              $item->images()->create([
-                  'path' => $path,
-                  'from' => 'gallery',
-              ]);
-          }
-      }
-  }
+     // Subir nuevas imágenes de galería si existen
+     if ($request->hasFile('gallery_images')) {
+         foreach ($request->file('gallery_images') as $imageFile) {
+             $path = $this->storeUniqueImage($imageFile);
+             $item->images()->create([
+                 'path' => $path,
+                 'from' => 'gallery',
+             ]);
+         }
+     }
+ }
 
 
 
