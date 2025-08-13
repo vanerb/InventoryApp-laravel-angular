@@ -1,1 +1,21 @@
-<p>view-item works!</p>
+<div style="width: 100%; height: 100%">
+  <div>
+    <img src="{{ returnImage(getImages(item.images))}}" style="width: 100%; height: 150px">
+  </div>
+  <div>
+    <span>{{ item.name }}</span>
+  </div>
+  <div>
+    <span>{{ item.description }}</span>
+  </div>
+  <div>
+    <div style="display: flex; justify-content: start; align-items: start">
+      <div style="margin-right: 10px" *ngFor="let img of item?.images; let i = index">
+        <img width="100" height="100" src="{{returnImage(img)}}">
+      </div>
+    </div>
+  </div>
+  <div>
+    <button>Cerrar</button>
+  </div>
+</div>

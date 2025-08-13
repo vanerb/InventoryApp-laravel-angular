@@ -106,11 +106,13 @@ export class ItemsComponent implements OnInit {
       });
   }
 
-  viewItem(id: number) {
+  viewItem(item: Item) {
     this.modalService.open(ViewItemComponent, {
       width: '90%',
 
-    }, {}).then(async () => {
+    }, {
+      item: item
+    }).then(async () => {
 
     })
       .catch(() => {
