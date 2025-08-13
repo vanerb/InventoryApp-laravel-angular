@@ -9,6 +9,11 @@ import {Image, Item} from "../../../../interfaces/item";
 export class ViewItemComponent {
 
   item!: Item;
+  close!: () => void;
+
+  constructor() {
+  }
+
 
   returnImage(image: Image) {
     if (image !== undefined)

@@ -44,6 +44,11 @@ return [
                 'driver' => 'sanctum',
                 'provider' => 'users',
             ],
+            'api_token' => [
+                    'driver' => 'token',
+                    'provider' => 'users',
+                    'hash' => false, // si tu token está en texto plano en la tabla
+                ],
     ],
 
     /*

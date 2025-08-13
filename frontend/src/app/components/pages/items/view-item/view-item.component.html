@@ -1,21 +1,21 @@
-<div style="width: 100%; height: 100%">
-  <div>
-    <img src="{{ returnImage(getImages(item.images))}}" style="width: 100%; height: 150px">
+<div style="width: 100%; height: 100%; font-family: var(--font-sans)">
+  <div style="width: 100%; height: 150px; border-start-end-radius: 5px; overflow: hidden">
+    <img  style="width: 100%; height: 100%; object-fit: cover; object-position: center;" src="{{ returnImage(getImages(item.images))}}" >
   </div>
-  <div>
-    <span>{{ item.name }}</span>
+  <div style="display: flex; justify-content: center; align-items: center; width: 100%; ">
+    <h1 style="font-size: 24px;">{{ item.name }}</h1>
   </div>
-  <div>
-    <span>{{ item.description }}</span>
+  <div style="display: flex; justify-content: center; align-items: center; width: 100%; ">
+    <p>{{ item.description }}</p>
   </div>
-  <div>
+  <div style="display: flex; justify-content: center; align-items: center; width: 100%; ">
     <div style="display: flex; justify-content: start; align-items: start">
       <div style="margin-right: 10px" *ngFor="let img of item?.images; let i = index">
         <img width="100" height="100" src="{{returnImage(img)}}">
       </div>
     </div>
   </div>
-  <div>
-    <button>Cerrar</button>
+  <div style="display: flex; justify-content: end; align-items: end; width: 100%">
+    <button (click)="close()" style="padding: 8px 16px;border-radius: 5px; border: 2px var(--background-one) solid; background-color: var(--background-one); color: var(--text-inverted);  cursor: pointer">Cerrar</button>
   </div>
 </div>

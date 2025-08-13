@@ -7,6 +7,8 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -15,14 +17,18 @@ class AuthenticatedSessionController extends Controller
      */
    public function store(LoginRequest $request)
     {
-        $request->authenticate();
+           $request->authenticate();
 
-           //$request->session()->regenerate(); // <-- Esta línea puede causar problemas en APIs sin sesión
+            $user = $request->user();
 
-           return response()->json([
-               'token' => $request->user()->createToken($request->device_name ?? 'api-token')->plainTextToken,
-               'user' => $request->user(),
-           ]);
+            // Generar token manual y guardarlo en api_token
+            $user->api_token = Str::random(60);
+            $user->save();
+
+            return response()->json([
+                'token' => $user->api_token,
+                'user' => $user,
+            ]);
     }
 
     /**

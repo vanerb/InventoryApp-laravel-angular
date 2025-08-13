@@ -20,6 +20,14 @@ class UserController extends Controller
         return $user;
     }
 
+    public function byToken()
+    {
+       $token = request()->bearerToken();
+           return User::where('api_token', $token)->first();
+
+
+    }
+
 
 
     /**
@@ -46,12 +54,13 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
-        $this->authorize('update', $user);
+       // $this->authorize('update', $user);
+       $this->authorize('update', $user);
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name' => [ 'string', 'max:255'],
+            'email' => ['string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password' => [ 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user->update($validated);

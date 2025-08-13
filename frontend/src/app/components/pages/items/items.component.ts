@@ -120,9 +120,7 @@ export class ItemsComponent implements OnInit {
       });
   }
 
-  imageError($event: Event) {
-    return this.utilitiesService.onImageError($event)
-  }
+
 
   updateItems() {
     this.itemsService.all().subscribe({
@@ -132,15 +130,23 @@ export class ItemsComponent implements OnInit {
     });
   }
 
-  returnImage(image: Image) {
-    if (image !== undefined)
-      return 'http://localhost:8000/image/' + image.path.replace(/^images\//, '')
-    else
-      return ""
-  }
+  actions(event: {
+    item: Item;
+    type: 'delete' | 'update' | 'view';
+  }) {
 
-  getImages(images: Image[]) {
-    return images.filter(el => el.from === 'cover')[0]
+    switch (event.type) {
+      case "delete":
+        this.deleteItem(event.item);
+        break
+      case "update":
+        this.editItem(event.item);
+        break
+      case "view":
+        this.viewItem(event.item);
+        break
+    }
+
   }
 
 }

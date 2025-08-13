@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Login, Token} from "../interfaces/auth";
 import {Router} from "@angular/router";
-import {CreateUser} from "../interfaces/user";
+import {CreateUser, User} from "../interfaces/user";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,11 @@ export class AuthService {
 
   getToken() {
     return localStorage.getItem('token');
+  }
+
+  getUserByToken(){
+    let headers = new HttpHeaders().set('Authorization', `Bearer ${this.getToken()}`);
+    return this.http.get<User>(this.base + '/user/token',  { headers })
   }
 
   login(login: Login) {

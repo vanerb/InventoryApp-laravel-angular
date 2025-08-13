@@ -13,7 +13,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 Route::get('/user/all', [UserController::class, 'index']);
 Route::get('/user/byId/{id}', [UserController::class, 'show']);
-Route::put('/user/{id}', [UserController::class, 'update']);
+Route::get('/user/token', [UserController::class, 'byToken']);
+Route::middleware('auth:api_token')->put('/user/{id}', [UserController::class, 'update']);
 Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
 

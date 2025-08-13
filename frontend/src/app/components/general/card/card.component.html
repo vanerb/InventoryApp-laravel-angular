@@ -1,1 +1,31 @@
-<p>card works!</p>
+<div
+     style="width: 100%; height: 100%; border: 2px var(--background-two) solid; border-radius: 5px; cursor: pointer"
+     (click)="viewItem(item)">
+  <div style="display: flex; justify-content: center; align-items: center; flex-direction: column">
+    <div style="width: 100%; height: 50px; border-start-end-radius: 5px; overflow: hidden">
+      <img
+        (error)="imageError($event)"
+        src="{{ returnImage(getImages(item.images)) }}"
+        style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
+      >
+    </div>
+
+    <div
+      style="padding: 20px; display: flex; justify-content: start; align-items: center; flex-direction: column;width: 100%; height: 100%">
+      <span style="font-size: 24px; font-weight: bold">{{ item.name }}</span>
+      <span>{{ item.description }}</span>
+    </div>
+    <div style="display: flex; justify-content: end; align-items: end">
+
+      <button
+        style="padding: 8px 16px;border-radius: 5px; border: 2px var(--background-one) solid; margin-right: 10px; background-color: var(--background-one); color: var(--text-inverted); cursor: pointer"
+        (click)="deleteItem(item); $event.stopPropagation()">🗑️
+      </button>
+      <button
+        style="padding: 8px 16px;border-radius: 5px; border: 2px var(--background-one) solid; background-color: var(--background-one); color: var(--text-inverted);  cursor: pointer"
+        (click)="editItem(item); $event.stopPropagation()">✏️
+      </button>
+    </div>
+
+  </div>
+</div>

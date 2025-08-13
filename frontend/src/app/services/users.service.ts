@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {CreateUser, UpdateUser} from "../interfaces/user";
+import {AuthService} from "./auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class UsersService {
 
   base = 'http://127.0.0.1:8000/api/user'
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private readonly authService: AuthService) {
   }
 
   all() {
@@ -29,7 +30,11 @@ export class UsersService {
   }
 
   update(user: UpdateUser) {
-    return this.http.put(this.base + '/' + user.id, user)
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+
+    return this.http.put(this.base + '/' + user.id, user, { headers })
   }
 
 }
