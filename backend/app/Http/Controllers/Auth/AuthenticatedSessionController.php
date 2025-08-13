@@ -16,20 +16,23 @@ class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      */
    public function store(LoginRequest $request)
-    {
-           $request->authenticate();
+            {
+                $request->authenticate();
 
-            $user = $request->user();
+                  $user = $request->user();
 
-            // Generar token manual y guardarlo en api_token
-            $user->api_token = Str::random(60);
-            $user->save();
+                  // Crear token de Sanctum
+                  $token = $user->createToken($request->device_name ?? 'api-token')->plainTextToken;
 
-            return response()->json([
-                'token' => $user->api_token,
-                'user' => $user,
-            ]);
-    }
+                  // Guardar el token también en users.api_token (opcional)
+                  $user->api_token = $token;
+                  $user->save();
+
+                  return response()->json([
+                      'token' => $token,
+                      'user' => $user,
+                  ]);
+            }
 
     /**
      * Destroy an authenticated session.

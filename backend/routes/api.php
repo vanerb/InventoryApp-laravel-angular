@@ -14,7 +14,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::get('/user/all', [UserController::class, 'index']);
 Route::get('/user/byId/{id}', [UserController::class, 'show']);
 Route::get('/user/token', [UserController::class, 'byToken']);
-Route::middleware('auth:api_token')->put('/user/{id}', [UserController::class, 'update']);
+//Route::put('/user/{id}', [UserController::class, 'update'])->middleware('auth:sanctum');
+
 Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
 
@@ -25,7 +26,6 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
 #Items
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', fn(Request $request) => $request->user());
+    Route::put('/user/{id}', [UserController::class, 'update']);
     Route::apiResource('items', ItemController::class);
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
 });

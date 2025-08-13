@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {UsersService} from "../../../services/users.service";
 import {UpdateUser, User} from "../../../interfaces/user";
-import {Token} from "../../../interfaces/auth";
 import {AuthService} from "../../../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +14,7 @@ export class ProfileComponent implements OnInit {
   form: FormGroup
   user!: User
 
-  constructor(private fb: FormBuilder, private readonly usersService: UsersService, private readonly authService: AuthService) {
+  constructor(private fb: FormBuilder, private readonly usersService: UsersService, private readonly authService: AuthService, private readonly router: Router) {
     this.form = this.fb.group({
       name: ['', []],
       password: ['', []],
@@ -60,7 +60,7 @@ export class ProfileComponent implements OnInit {
     this.usersService.update(command).subscribe({
       next: async () => {
 
-       // window.location.reload()
+        // window.location.reload()
 
       },
       error: (err) => {
@@ -68,5 +68,11 @@ export class ProfileComponent implements OnInit {
       }
     });
 
+  }
+
+  async logout(){
+    this.authService.logout();
+    await this.router.navigate(['/login']);
+    window.location.reload()
   }
 }
